@@ -1,27 +1,40 @@
-const { expect, test } = require("@playwright/test");
-const pageUrl = "http://localhost:3000";
+const { test, expect } = require('@playwright/test');
 
-test("Verify All Books link is visible", async ( {page} ) => {
-    await page.goto(pageUrl);
-    await page.waitForSelector("#site-header > nav");
-    const allBooksLink = await page.$('a[href="/catalog"]');
-    const isAllBooksLinkVisible = await allBooksLink.isVisible();
-    expect(isAllBooksLinkVisible).toBe(true);
+let pageURL = 'http://localhost:3000/'
+
+test("Verify 'All Books' link is visible", async ({ page }) => {
+    await page.goto(pageURL);
+    await page.waitForSelector('.navbar');
+    const allBooksLink = await page.$("#site-header > nav > section > a");
+    const isLinkVisible = await allBooksLink.isVisible();
+    expect(isLinkVisible).toBe(true);
 });
 
-test("Verify Login button is visible", async ( {page} ) => {
-    await page.goto(pageUrl);
-    await page.waitForSelector("#site-header > nav");
-    const loginButton = await page.$('a[href="/login"]');
-    const isLoginButtonVisible = await loginButton.isVisible();
+test("Verify 'Login' button is visible", async ({ page }) => {
+    await page.goto(pageURL);
+    // await page.waitForSelector('#guest');
+    const loginButtonLink = await page.$("#guest a[href='/login']");
+    const isLoginButtonVisible = await loginButtonLink.isVisible();
     expect(isLoginButtonVisible).toBe(true);
 });
 
-test("Verify Register button is visible", async ( {page} ) => {
-    await page.goto(pageUrl);
-    await page.waitForSelector("#site-header > nav");
-    // const registerButton = await page.$('a[href="/register"]');
-    const registerButton = await page.locator('xpath=/html/body/div/header/nav/section/div[1]/a[2]');
-    const isRegisterButtonVisible = await registerButton.isVisible();
+test("Verify 'Register' button is visible", async ({ page }) => {
+    await page.goto(pageURL);
+    // await page.waitForSelector('#guest');
+    const registerButtonLink = await page.$("#guest a[href='/register']");
+    const isRegisterButtonVisible = await registerButtonLink.isVisible();
     expect(isRegisterButtonVisible).toBe(true);
 });
+
+test("Verify 'All Books' button is visible after login", async ({ page }) => {
+    await page.goto('http://localhost:3000/login');
+    // await page.waitForSelector('#guest');
+    await page.fill('input[name="email"]', 'peter@abv.bg');
+    await page.fill('input[name="password"]', '123456');
+    await page.click(".submit")
+    const allBooksLink = await page.$("#site-header > nav > section > a");
+    const isLinkVisible = await allBooksLink.isVisible();
+    expect(isLinkVisible).toBe(true);
+});
+
+
