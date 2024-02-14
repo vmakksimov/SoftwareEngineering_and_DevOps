@@ -46,5 +46,4 @@ if (require.main === module) {
     server.listen(3000, () => console.log('Server is up and running'));
 }
 
-// module.exports = server;
-export default server; // Exporting for testing
+module.exports = server; // Exporting for testing
